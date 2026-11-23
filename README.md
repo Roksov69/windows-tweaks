@@ -46,8 +46,7 @@
 
 ## 📸 Скриншот
 
-![Скриншот интерфейса](https://github.com/roksov69/windows-tweaks/assets/ВАШ_ID_АССЕТА/ВАШЕ_ИМЯ_КАРТИНКИ.png)
-*(Замените ссылку на вашу картинку, которую вы прикрепили в репозиторий)*
+<img width="450" height="544" alt="{460CBB96-3EBF-4194-9AE9-3F18F5F5CDD3}" src="https://github.com/user-attachments/assets/b039163b-4415-4f02-8968-bcf5990c8e10" />
 
 ---
 
