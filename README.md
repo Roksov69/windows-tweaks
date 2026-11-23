@@ -1,4 +1,4 @@
-# 🪟 windows-tweaks by roksov69
+# 👾 windows-tweaks
 
 ![Windows 11](https://img.shields.io/badge/Windows-11-0078D6?style=for-the-badge&logo=windows11&logoColor=white)
 ![Batch Script](https://img.shields.io/badge/Language-Batch-4D4D4D?style=for-the-badge&logo=windows-terminal&logoColor=white)
