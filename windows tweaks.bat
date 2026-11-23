@@ -124,8 +124,6 @@ echo   %T_EXP1%
 echo   %T_EXP2%
 echo   %T_EXP3%
 echo   %T_EXP4%
-echo   %T_EXP5%
-echo   %T_EXP7%
 echo   %T_BACK%
 echo.
 echo   -------------------------
@@ -138,15 +136,74 @@ echo.
 
 set /p "choice=  > "
 
-if "%choice%"=="1" goto exp_home
-if "%choice%"=="2" goto exp_gallery
-if "%choice%"=="3" goto exp_network
-if "%choice%"=="4" goto exp_restore
-if "%choice%"=="5" goto exp_compact
-if "%choice%"=="7" goto exp_thispc
+if "%choice%"=="1" goto exp_remove_all
+if "%choice%"=="2" goto exp_restore
+if "%choice%"=="3" goto exp_compact
+if "%choice%"=="4" goto exp_thispc
 if "%choice%"=="0" goto customize
 if "%choice%"=="9" goto switchlang
 goto explorer
+
+:hide
+call :loadtext
+echo.
+echo   %T_HIDING%
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{645FF040-5081-101B-9F08-00AA002F954E}" /t REG_DWORD /d 1 /f >nul 2>&1
+call :restart
+goto done
+
+:show
+call :loadtext
+echo.
+echo   %T_SHOWING%
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t REG_DWORD /d 0 /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{645FF040-5081-101B-9F08-00AA002F954E}" /t REG_DWORD /d 0 /f >nul 2>&1
+call :restart
+goto done
+
+:exp_remove_all
+call :loadtext
+echo.
+echo   %T_PROCESS%
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t REG_DWORD /d 1 /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" /f >nul 2>&1
+reg add "HKCU\Software\Classes\CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /v System.IsPinnedToNameSpaceTree /t REG_DWORD /d 0 /f >nul 2>&1
+call :restart
+goto done_exp
+
+:exp_restore
+call :loadtext
+echo.
+echo   %T_PROCESS%
+
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" /ve /d "CLSID_MSGraphHomeFolder" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t REG_DWORD /d 0 /f >nul 2>&1
+
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" /ve /t REG_SZ /d "Gallery" /f >nul 2>&1
+
+reg add "HKCU\Software\Classes\CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /v System.IsPinnedToNameSpaceTree /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v UseCompactMode /t REG_DWORD /d 0 /f >nul 2>&1
+
+call :restart
+goto done_exp
+
+:exp_compact
+call :loadtext
+echo.
+echo   %T_PROCESS%
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v UseCompactMode /t REG_DWORD /d 1 /f >nul 2>&1
+call :restart
+goto done_exp
+
+:exp_thispc
+call :loadtext
+echo.
+echo   %T_PROCESS%
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v LaunchTo /t REG_DWORD /d 1 /f >nul 2>&1
+call :restart
+goto done_exp
 
 :cleanup
 set "LANG=en"
@@ -245,64 +302,6 @@ echo.
 timeout /t 3 >nul
 goto cleanup
 
-:exp_home
-call :loadtext
-echo.
-echo   %T_PROCESS%
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t REG_DWORD /d 1 /f >nul 2>&1
-reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" /f >nul 2>&1
-call :restart
-goto done_exp
-
-:exp_gallery
-call :loadtext
-echo.
-echo   %T_PROCESS%
-reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" /f >nul 2>&1
-call :restart
-goto done_exp
-
-:exp_network
-call :loadtext
-echo.
-echo   %T_PROCESS%
-reg add "HKCU\Software\Classes\CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /v System.IsPinnedToNameSpaceTree /t REG_DWORD /d 0 /f >nul 2>&1
-call :restart
-goto done_exp
-
-:exp_restore
-call :loadtext
-echo.
-echo   %T_PROCESS%
-
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" /ve /d "CLSID_MSGraphHomeFolder" /f >nul 2>&1
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t REG_DWORD /d 0 /f >nul 2>&1
-
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" /ve /t REG_SZ /d "Gallery" /f >nul 2>&1
-
-reg add "HKCU\Software\Classes\CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /v System.IsPinnedToNameSpaceTree /t REG_DWORD /d 1 /f >nul 2>&1
-
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v UseCompactMode /t REG_DWORD /d 0 /f >nul 2>&1
-
-call :restart
-goto done_exp
-
-:exp_compact
-call :loadtext
-echo.
-echo   %T_PROCESS%
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v UseCompactMode /t REG_DWORD /d 1 /f >nul 2>&1
-call :restart
-goto done_exp
-
-:exp_thispc
-call :loadtext
-echo.
-echo   %T_PROCESS%
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v LaunchTo /t REG_DWORD /d 1 /f >nul 2>&1
-call :restart
-goto done_exp
-
 :activate
 set "LANG=en"
 cls
@@ -322,6 +321,7 @@ goto main
 
 :restart
 taskkill /f /im explorer.exe >nul 2>&1
+timeout /t 1 >nul
 start explorer.exe
 exit /b
 
@@ -368,12 +368,10 @@ if /i "%LANG%"=="ru" (
     set "T_DONE=готово"
     set "T_PROCESS=обработка..."
     set "T_EXP=проводник"
-    set "T_EXP1=1  убрать главную"
-    set "T_EXP2=2  убрать галерею"
-    set "T_EXP3=3  убрать сеть"
-    set "T_EXP4=4  вернуть все"
-    set "T_EXP5=5  сделать компактнее проводник"
-    set "T_EXP7=7  открывать этот компьютер"
+    set "T_EXP1=1  убрать все (главная, сеть, галерея)"
+    set "T_EXP2=2  вернуть все"
+    set "T_EXP3=3  сделать компактнее проводник"
+    set "T_EXP4=4  открывать этот компьютер"
     set "T_CUST=кастомизация"
     set "T_CUST1=1  рабочий стол"
     set "T_CUST2=2  проводник"
@@ -411,12 +409,10 @@ if /i "%LANG%"=="ru" (
     set "T_DONE=done"
     set "T_PROCESS=processing..."
     set "T_EXP=explorer"
-    set "T_EXP1=1  remove home"
-    set "T_EXP2=2  remove gallery"
-    set "T_EXP3=3  remove network"
-    set "T_EXP4=4  restore all"
-    set "T_EXP5=5  make explorer compact"
-    set "T_EXP7=7  open this pc"
+    set "T_EXP1=1  remove all (home, network, gallery)"
+    set "T_EXP2=2  restore all"
+    set "T_EXP3=3  make explorer compact"
+    set "T_EXP4=4  open this pc"
     set "T_CUST=customization"
     set "T_CUST1=1  desktop"
     set "T_CUST2=2  explorer"
