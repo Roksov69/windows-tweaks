@@ -6,6 +6,17 @@ color 0F
 
 set "LANG=en"
 
+:: Проверка прав администратора
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    echo.
+    echo   [!] Run as administrator required
+    echo   [!] Запустите от имени администратора
+    echo.
+    pause
+    exit /b
+)
+
 :main
 cls
 call :loadtext
@@ -29,6 +40,7 @@ if /i "%LANG%"=="ru" (
 )
 echo.
 
+set "choice="
 set /p "choice=  > "
 
 if "%choice%"=="1" goto customize
@@ -62,6 +74,7 @@ echo   %T_REVERT_DESC2%
 echo   %T_REVERT_DESC3%
 echo   %T_REVERT_DESC4%
 echo   %T_REVERT_DESC5%
+echo   %T_REVERT_DESC6%
 echo.
 echo   %T_BACK%
 echo.
@@ -73,6 +86,7 @@ if /i "%LANG%"=="ru" (
 )
 echo.
 
+set "choice="
 set /p "choice=  > "
 
 if "%choice%"=="1" goto apply_all
@@ -92,16 +106,19 @@ echo.
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t REG_DWORD /d 1 /f >nul 2>&1
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{645FF040-5081-101B-9F08-00AA002F954E}" /t REG_DWORD /d 1 /f >nul 2>&1
 
-:: 2. Проводник (убрать главную, сеть, галерею + компактный режим)
+:: 2. Проводник (убрать главную, сеть, галерею + компактный режим + этот компьютер)
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t REG_DWORD /d 1 /f >nul 2>&1
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" /f >nul 2>&1
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" /f >nul 2>&1
 reg add "HKCU\Software\Classes\CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /v System.IsPinnedToNameSpaceTree /t REG_DWORD /d 0 /f >nul 2>&1
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v UseCompactMode /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v LaunchTo /t REG_DWORD /d 1 /f >nul 2>&1
 
 :: 3. Кастомизация (цвета и классическое меню)
 reg add "HKCU\Control Panel\Colors" /v Hilight /t REG_SZ /d "24 26 27" /f >nul 2>&1
 reg add "HKCU\Control Panel\Colors" /v HotTrackingColor /t REG_SZ /d "24 26 27" /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v AppsUseLightTheme /t REG_DWORD /d 0 /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v SystemUsesLightTheme /t REG_DWORD /d 0 /f >nul 2>&1
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /d "" /f >nul 2>&1
 
 :: 4. Очистка (временные файлы)
@@ -123,16 +140,19 @@ echo.
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t REG_DWORD /d 0 /f >nul 2>&1
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{645FF040-5081-101B-9F08-00AA002F954E}" /t REG_DWORD /d 0 /f >nul 2>&1
 
-:: 2. Проводник (вернуть главную, сеть, галерею + обычный режим)
+:: 2. Проводник (вернуть главную, сеть, галерею + обычный режим + домашняя страница)
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" /ve /d "CLSID_MSGraphHomeFolder" /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t REG_DWORD /d 0 /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" /ve /t REG_SZ /d "Gallery" /f >nul 2>&1
 reg add "HKCU\Software\Classes\CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /v System.IsPinnedToNameSpaceTree /t REG_DWORD /d 1 /f >nul 2>&1
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v UseCompactMode /t REG_DWORD /d 0 /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v LaunchTo /t REG_DWORD /d 2 /f >nul 2>&1
 
-:: 3. Кастомизация (сброс цветов + вернуть меню windows 11)
+:: 3. Кастомизация (сброс цветов + светлая тема + меню windows 11)
 reg add "HKCU\Control Panel\Colors" /v Hilight /t REG_SZ /d "0 120 215" /f >nul 2>&1
 reg add "HKCU\Control Panel\Colors" /v HotTrackingColor /t REG_SZ /d "0 102 204" /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v AppsUseLightTheme /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v SystemUsesLightTheme /t REG_DWORD /d 1 /f >nul 2>&1
 reg delete "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}" /f >nul 2>&1
 
 echo   %T_DONE%
@@ -164,6 +184,7 @@ if /i "%LANG%"=="ru" (
 )
 echo.
 
+set "choice="
 set /p "choice=  > "
 
 if "%choice%"=="1" goto desktop
@@ -206,6 +227,7 @@ if /i "%LANG%"=="ru" (
 )
 echo.
 
+set "choice="
 set /p "choice=  > "
 
 if "%choice%"=="1" goto hide
@@ -237,6 +259,7 @@ if /i "%LANG%"=="ru" (
 )
 echo.
 
+set "choice="
 set /p "choice=  > "
 
 if "%choice%"=="1" goto exp_remove_all
@@ -288,7 +311,6 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t 
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" /ve /t REG_SZ /d "Gallery" /f >nul 2>&1
 
 reg add "HKCU\Software\Classes\CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /v System.IsPinnedToNameSpaceTree /t REG_DWORD /d 1 /f >nul 2>&1
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v UseCompactMode /t REG_DWORD /d 0 /f >nul 2>&1
 
 call :restart
 goto done_exp
@@ -318,8 +340,6 @@ call :restart
 goto done_exp
 
 :cleanup
-set "RETURN_LANG=%LANG%"
-set "LANG=en"
 cls
 call :loadtext
 
@@ -338,16 +358,15 @@ if /i "%LANG%"=="ru" (
 )
 echo.
 
+set "choice="
 set /p "choice=  > "
 
 if "%choice%"=="1" goto cln_temp
-if "%choice%"=="0" set "LANG=%RETURN_LANG%" & goto main
+if "%choice%"=="0" goto main
 if "%choice%"=="9" set "RETURN=cleanup" & goto switchlang
 goto cleanup
 
 :specs
-set "RETURN_LANG=%LANG%"
-set "LANG=en"
 cls
 call :loadtext
 echo.
@@ -361,8 +380,9 @@ echo.
 echo   -------------------------
 echo   %T_BACK%
 echo.
+set "choice="
 set /p "choice=  > "
-if "%choice%"=="0" set "LANG=%RETURN_LANG%" & goto main
+if "%choice%"=="0" goto main
 if "%choice%"=="9" set "RETURN=specs" & goto switchlang
 goto specs
 
@@ -405,7 +425,9 @@ call :loadtext
 echo.
 echo   %T_PROCESS%
 
-for /f "usebackq tokens=*" %%a in (`powershell -NoProfile -Command "$path = $env:TEMP; $size = (Get-ChildItem $path -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum; $sizeMB = [math]::Round($size / 1MB, 2); Write-Output $sizeMB"`) do set "CLEANED_MB=%%a"
+for /f "usebackq tokens=*" %%a in (`powershell -NoProfile -Command "$path = $env:TEMP; $size = (Get-ChildItem $path -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum; if ($size -eq $null) { $size = 0 }; $sizeMB = [math]::Round($size / 1MB, 2); Write-Output $sizeMB"`) do set "CLEANED_MB=%%a"
+
+if "%CLEANED_MB%"=="" set "CLEANED_MB=0"
 
 del /q /f /s "%TEMP%\*" >nul 2>&1
 
@@ -427,6 +449,10 @@ echo.
 echo   %T_PROCESS%
 timeout /t 1 >nul
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process powershell -Verb RunAs -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-Command','chcp 65001 >$null; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; irm https://get.activated.win | iex'"
+echo.
+echo   %T_DONE%
+echo.
+timeout /t 3 >nul
 goto main
 
 :switchlang
@@ -527,7 +553,8 @@ if /i "%LANG%"=="ru" (
     set "T_REVERT_DESC2=   - вернуть главную, сеть и галерею"
     set "T_REVERT_DESC3=   - вернуть вид проводника"
     set "T_REVERT_DESC4=   - сбросить цвета"
-    set "T_REVERT_DESC5=   - вернуть меню windows 11"
+    set "T_REVERT_DESC5=   - вернуть светлую тему"
+    set "T_REVERT_DESC6=   - вернуть меню windows 11"
 ) else (
     set "T_MENU1=1  customization"
     set "T_MENU2=2  activate windows"
@@ -587,6 +614,7 @@ if /i "%LANG%"=="ru" (
     set "T_REVERT_DESC2=   - restore home, network and gallery"
     set "T_REVERT_DESC3=   - restore explorer view"
     set "T_REVERT_DESC4=   - reset colors"
-    set "T_REVERT_DESC5=   - restore windows 11 context menu"
+    set "T_REVERT_DESC5=   - restore light theme"
+    set "T_REVERT_DESC6=   - restore windows 11 context menu"
 )
 exit /b
