@@ -1,55 +1,55 @@
-# 👾 windows-tweaks
+# 👾 windows-tweaks by roksov69
 
 ![Windows 11](https://img.shields.io/badge/Windows-11-0078D6?style=for-the-badge&logo=windows11&logoColor=white)
 ![Batch Script](https://img.shields.io/badge/Language-Batch-4D4D4D?style=for-the-badge&logo=windows-terminal&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-**windows-tweaks** — это легковесный и минималистичный набор утилит в одном `.bat` файле, который позволяет быстро настроить Windows 11 без установки стороннего софта.
+**windows-tweaks** is a lightweight and minimalist set of utilities in a single `.bat` file that allows you to quickly configure Windows 11 without installing third-party software.
 
-Скрипт работает через стандартные средства системы (реестр и PowerShell), не нагружает ПК и всегда под рукой.
-
----
-
-## ✨ Возможности
-
-Всё управление происходит через удобное консольное меню. Вот что умеет скрипт:
-
-- 🎨 **Кастомизация**
-  - Управление значками рабочего стола («Этот компьютер», «Корзина»)
-  - Тонкая настройка проводника (убрать «Главную», «Галерею», «Сеть»)
-  - Включение компактного режима проводника
-  - Открытие проводника сразу на «Этот компьютер»
-  - Настройка темного выделения цвета и темной темы системы
-  - Возврат классического контекстного меню (как в Windows 10)
-
-- ⚡ **Активация**
-  - Быстрый запуск официального скрипта MAS (Microsoft Activation Scripts) для активации системы (через `get.activated.win`)
-
-- 💻 **Характеристики ПК**
-  - Просмотр процессора, видеокарты, объема ОЗУ и полного объема физических дисков
-
-- 🧹 **Очистка**
-  - Безопасное удаление временных файлов (`%TEMP%`) с отчетом об освобожденном месте и пути к папке
-
-- 🌐 **Мультиязычность**
-  - Переключение интерфейса между русским (RU) и английским (EN) языками.
+The script works through standard system tools (Registry and PowerShell), does not put a load on the PC, and is always at hand.
 
 ---
 
-## 🚀 Как начать пользоваться
+## ✨ Features
 
-1. Перейдите в раздел **Code** (зеленая кнопка) и скачайте ZIP-архив, либо скачайте файл напрямую.
-2. Распакуйте архив (если скачали ZIP).
-3. Нажмите **правой кнопкой мыши** на `.bat` файл и выберите **«Запуск от имени администратора»** (это важно, так как некоторые твики требуют прав администратора).
+All control is done through a convenient console menu. Here is what the script can do:
+
+- 🎨 **Customization**
+  - Manage desktop icons ("This PC", "Recycle Bin")
+  - Fine-tune Explorer (remove "Home", "Gallery", "Network")
+  - Enable compact mode in Explorer
+  - Open Explorer directly to "This PC"
+  - Set dark highlight color and dark system theme
+  - Restore the classic context menu (like in Windows 10)
+
+- ⚡ **Activation**
+  - Quick launch of the official MAS (Microsoft Activation Scripts) for system activation (via `get.activated.win`)
+
+- 💻 **PC Specs**
+  - View processor, graphics card, RAM capacity, and total physical disk capacity
+
+- 🧹 **Cleanup**
+  - Safe deletion of temporary files (`%TEMP%`) with a report on freed space and folder path
+
+- 🌐 **Multilingual**
+  - Toggle the interface between Russian (RU) and English (EN) languages.
 
 ---
 
-## 📸 Скриншоты
+## 🚀 Getting Started
+
+1. Go to the **Code** section (green button) and download the ZIP archive, or download the file directly.
+2. Extract the archive (if you downloaded the ZIP).
+3. **Right-click** on the `.bat` file and select **"Run as administrator"** (this is important because some tweaks require administrator privileges).
+
+---
+
+## 📸 Screenshot
 
 <img width="450" height="544" alt="{460CBB96-3EBF-4194-9AE9-3F18F5F5CDD3}" src="https://github.com/user-attachments/assets/b039163b-4415-4f02-8968-bcf5990c8e10" />
 <img width="450" height="544" alt="{4D1794F1-F8BF-4898-BA7A-E90C620EA2CD}" src="https://github.com/user-attachments/assets/c6c00c2d-1c12-4f97-a8f0-07e732901e96" />
 
 ---
 
-## ⚠️ Важное примечание
-Перед запуском убедитесь, что ваш антивирус не блокирует `.bat` файл. Скрипт не содержит вредоносного кода, но использует реестр и PowerShell для внесения изменений. Все действия обратимы.
+## ⚠️ Important Note
+Before running, make sure your antivirus is not blocking the `.bat` file. The script does not contain malicious code but uses the Registry and PowerShell to make changes. All actions are reversible.
