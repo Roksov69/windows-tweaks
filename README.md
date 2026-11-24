@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Batch Script](https://img.shields.io/badge/Language-Batch-4D4D4D?style=for-the-badge&logo=windows-terminal&logoColor=white)
 
-**windows-tweaks** is a lightweight and minimalist set of utilities in a single `.bat` file that allows you to quickly configure Windows 11 without installing third-party software.
+**windows-tweaks** is a lightweight and minimalist set of utilities built into a single `.bat` file, allowing you to quickly configure Windows 11 without installing third-party software.
 
 The script works through standard system tools (Registry and PowerShell), does not put a load on the PC, and is always at hand.
 
@@ -46,8 +46,10 @@ All control is done through a convenient console menu. Here is what the script c
 
 ## 📸 Screenshot
 
-<img width="450" height="544" alt="{460CBB96-3EBF-4194-9AE9-3F18F5F5CDD3}" src="https://github.com/user-attachments/assets/b039163b-4415-4f02-8968-bcf5990c8e10" />
-<img width="450" height="544" alt="{4D1794F1-F8BF-4898-BA7A-E90C620EA2CD}" src="https://github.com/user-attachments/assets/c6c00c2d-1c12-4f97-a8f0-07e732901e96" />
+<div align="center">
+  <img width="450" height="544" alt="{460CBB96-3EBF-4194-9AE9-3F18F5F5CDD3}" src="https://github.com/user-attachments/assets/b039163b-4415-4f02-8968-bcf5990c8e10" />
+  <img width="450" height="544" alt="{4D1794F1-F8BF-4898-BA7A-E90C620EA2CD}" src="https://github.com/user-attachments/assets/c6c00c2d-1c12-4f97-a8f0-07e732901e96" />
+</div>
 
 ---
 
