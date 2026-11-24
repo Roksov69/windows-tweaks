@@ -1,23 +1,24 @@
 @echo off
 chcp 65001 >nul
-mode con: cols=56 lines=32
-title windows tweaks by roksov69
+mode con: cols=54 lines=30
+title windows-tweaks by roksov69
 color 0F
 
-set "LANG=ru"
+set "LANG=en"
 
 :main
 cls
 call :loadtext
 
 echo.
-echo   windows tweaks by roksov69
+echo   windows-tweaks by roksov69
 echo   -------------------------
 echo.
 echo   %T_MENU1%
 echo   %T_MENU2%
 echo   %T_MENU3%
 echo   %T_MENU4%
+echo   %T_MENU5%
 echo   %T_MENU0%
 echo.
 echo   -------------------------
@@ -34,9 +35,110 @@ if "%choice%"=="1" goto customize
 if "%choice%"=="2" goto activate
 if "%choice%"=="3" goto specs
 if "%choice%"=="4" goto cleanup
-if "%choice%"=="9" goto switchlang
+if "%choice%"=="5" goto apply_all_menu
+if "%choice%"=="9" set "RETURN=main" & goto switchlang
 if "%choice%"=="0" exit /b
 goto main
+
+:apply_all_menu
+cls
+call :loadtext
+echo.
+echo   %T_APPLY_TITLE%
+echo   -------------------------
+echo.
+echo   %T_APPLY1%
+echo   %T_APPLY_DESC1%
+echo   %T_APPLY_DESC2%
+echo   %T_APPLY_DESC3%
+echo   %T_APPLY_DESC4%
+echo   %T_APPLY_DESC5%
+echo   %T_APPLY_DESC6%
+echo   %T_APPLY_DESC7%
+echo.
+echo   %T_APPLY2%
+echo   %T_REVERT_DESC1%
+echo   %T_REVERT_DESC2%
+echo   %T_REVERT_DESC3%
+echo   %T_REVERT_DESC4%
+echo   %T_REVERT_DESC5%
+echo.
+echo   %T_BACK%
+echo.
+echo   -------------------------
+if /i "%LANG%"=="ru" (
+    echo   9  [ru]  en
+) else (
+    echo   9  ru  [en]
+)
+echo.
+
+set /p "choice=  > "
+
+if "%choice%"=="1" goto apply_all
+if "%choice%"=="2" goto revert_all
+if "%choice%"=="0" goto main
+if "%choice%"=="9" set "RETURN=apply_all_menu" & goto switchlang
+goto apply_all_menu
+
+:apply_all
+cls
+call :loadtext
+echo.
+echo   %T_APPLYING%
+echo.
+
+:: 1. Рабочий стол (скрыть)
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{645FF040-5081-101B-9F08-00AA002F954E}" /t REG_DWORD /d 1 /f >nul 2>&1
+
+:: 2. Проводник (убрать главную, сеть, галерею + компактный режим)
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t REG_DWORD /d 1 /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" /f >nul 2>&1
+reg add "HKCU\Software\Classes\CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /v System.IsPinnedToNameSpaceTree /t REG_DWORD /d 0 /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v UseCompactMode /t REG_DWORD /d 1 /f >nul 2>&1
+
+:: 3. Кастомизация (цвета и классическое меню)
+reg add "HKCU\Control Panel\Colors" /v Hilight /t REG_SZ /d "24 26 27" /f >nul 2>&1
+reg add "HKCU\Control Panel\Colors" /v HotTrackingColor /t REG_SZ /d "24 26 27" /f >nul 2>&1
+reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /d "" /f >nul 2>&1
+
+:: 4. Очистка (временные файлы)
+del /q /f /s "%TEMP%\*" >nul 2>&1
+
+echo   %T_DONE%
+timeout /t 2 >nul
+call :restart
+goto apply_all_menu
+
+:revert_all
+cls
+call :loadtext
+echo.
+echo   %T_REVERTING%
+echo.
+
+:: 1. Рабочий стол (вернуть)
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t REG_DWORD /d 0 /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{645FF040-5081-101B-9F08-00AA002F954E}" /t REG_DWORD /d 0 /f >nul 2>&1
+
+:: 2. Проводник (вернуть главную, сеть, галерею + обычный режим)
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" /ve /d "CLSID_MSGraphHomeFolder" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t REG_DWORD /d 0 /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" /ve /t REG_SZ /d "Gallery" /f >nul 2>&1
+reg add "HKCU\Software\Classes\CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /v System.IsPinnedToNameSpaceTree /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v UseCompactMode /t REG_DWORD /d 0 /f >nul 2>&1
+
+:: 3. Кастомизация (сброс цветов + вернуть меню windows 11)
+reg add "HKCU\Control Panel\Colors" /v Hilight /t REG_SZ /d "0 120 215" /f >nul 2>&1
+reg add "HKCU\Control Panel\Colors" /v HotTrackingColor /t REG_SZ /d "0 102 204" /f >nul 2>&1
+reg delete "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}" /f >nul 2>&1
+
+echo   %T_DONE%
+timeout /t 2 >nul
+call :restart
+goto apply_all_menu
 
 :customize
 cls
@@ -71,7 +173,7 @@ if "%choice%"=="4" goto cust_dark
 if "%choice%"=="5" goto ctx_classic
 if "%choice%"=="6" goto ctx_restore
 if "%choice%"=="0" goto main
-if "%choice%"=="9" goto switchlang
+if "%choice%"=="9" set "RETURN=customize" & goto switchlang
 goto customize
 
 :desktop
@@ -109,7 +211,7 @@ set /p "choice=  > "
 if "%choice%"=="1" goto hide
 if "%choice%"=="2" goto show
 if "%choice%"=="0" goto customize
-if "%choice%"=="9" goto switchlang
+if "%choice%"=="9" set "RETURN=desktop" & goto switchlang
 goto desktop
 
 :explorer
@@ -124,6 +226,7 @@ echo   %T_EXP1%
 echo   %T_EXP2%
 echo   %T_EXP3%
 echo   %T_EXP4%
+echo   %T_EXP5%
 echo   %T_BACK%
 echo.
 echo   -------------------------
@@ -139,9 +242,10 @@ set /p "choice=  > "
 if "%choice%"=="1" goto exp_remove_all
 if "%choice%"=="2" goto exp_restore
 if "%choice%"=="3" goto exp_compact
-if "%choice%"=="4" goto exp_thispc
+if "%choice%"=="4" goto exp_normal
+if "%choice%"=="5" goto exp_thispc
 if "%choice%"=="0" goto customize
-if "%choice%"=="9" goto switchlang
+if "%choice%"=="9" set "RETURN=explorer" & goto switchlang
 goto explorer
 
 :hide
@@ -197,6 +301,14 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v Us
 call :restart
 goto done_exp
 
+:exp_normal
+call :loadtext
+echo.
+echo   %T_PROCESS%
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v UseCompactMode /t REG_DWORD /d 0 /f >nul 2>&1
+call :restart
+goto done_exp
+
 :exp_thispc
 call :loadtext
 echo.
@@ -206,6 +318,7 @@ call :restart
 goto done_exp
 
 :cleanup
+set "RETURN_LANG=%LANG%"
 set "LANG=en"
 cls
 call :loadtext
@@ -228,11 +341,12 @@ echo.
 set /p "choice=  > "
 
 if "%choice%"=="1" goto cln_temp
-if "%choice%"=="0" goto main
-if "%choice%"=="9" goto switchlang
+if "%choice%"=="0" set "LANG=%RETURN_LANG%" & goto main
+if "%choice%"=="9" set "RETURN=cleanup" & goto switchlang
 goto cleanup
 
 :specs
+set "RETURN_LANG=%LANG%"
 set "LANG=en"
 cls
 call :loadtext
@@ -248,7 +362,8 @@ echo   -------------------------
 echo   %T_BACK%
 echo.
 set /p "choice=  > "
-if "%choice%"=="0" goto main
+if "%choice%"=="0" set "LANG=%RETURN_LANG%" & goto main
+if "%choice%"=="9" set "RETURN=specs" & goto switchlang
 goto specs
 
 :cust_hilight
@@ -303,11 +418,10 @@ timeout /t 3 >nul
 goto cleanup
 
 :activate
-set "LANG=en"
 cls
 call :loadtext
 echo.
-echo   windows tweaks by roksov69
+echo   windows-tweaks by roksov69
 echo   -------------------------
 echo.
 echo   %T_PROCESS%
@@ -317,6 +431,13 @@ goto main
 
 :switchlang
 if /i "%LANG%"=="ru" (set "LANG=en") else (set "LANG=ru")
+if "%RETURN%"=="main" goto main
+if "%RETURN%"=="customize" goto customize
+if "%RETURN%"=="desktop" goto desktop
+if "%RETURN%"=="explorer" goto explorer
+if "%RETURN%"=="cleanup" goto cleanup
+if "%RETURN%"=="specs" goto specs
+if "%RETURN%"=="apply_all_menu" goto apply_all_menu
 goto main
 
 :restart
@@ -352,7 +473,9 @@ if /i "%LANG%"=="ru" (
     set "T_MENU2=2  активировать windows"
     set "T_MENU3=3  характеристики пк"
     set "T_MENU4=4  очистка"
+    set "T_MENU5=5  применить / отменить все"
     set "T_MENU0=0  выход"
+    set "T_APPLY_TITLE=применить / отменить все"
     set "T_DESK=рабочий стол"
     set "T_PC=компьютер"
     set "T_BIN=корзина"
@@ -371,7 +494,8 @@ if /i "%LANG%"=="ru" (
     set "T_EXP1=1  убрать все (главная, сеть, галерея)"
     set "T_EXP2=2  вернуть все"
     set "T_EXP3=3  сделать компактнее проводник"
-    set "T_EXP4=4  открывать этот компьютер"
+    set "T_EXP4=4  вернуть вид проводника"
+    set "T_EXP5=5  открывать этот компьютер"
     set "T_CUST=кастомизация"
     set "T_CUST1=1  рабочий стол"
     set "T_CUST2=2  проводник"
@@ -388,12 +512,30 @@ if /i "%LANG%"=="ru" (
     set "T_CLN1=1  очистить временные файлы"
     set "T_CLN_SIZE=освобождено:"
     set "T_CLN_PATH=папка:"
+    set "T_APPLYING=применяю все настройки..."
+    set "T_REVERTING=отменяю все настройки..."
+    set "T_APPLY1=1  применить все"
+    set "T_APPLY_DESC1=   - скрыть компьютер и корзину"
+    set "T_APPLY_DESC2=   - убрать главную, сеть и галерею"
+    set "T_APPLY_DESC3=   - включить компактный проводник"
+    set "T_APPLY_DESC4=   - темное выделение цвета"
+    set "T_APPLY_DESC5=   - темная тема"
+    set "T_APPLY_DESC6=   - очистить временные файлы"
+    set "T_APPLY_DESC7=   - включить классическое меню"
+    set "T_APPLY2=2  отменить все"
+    set "T_REVERT_DESC1=   - вернуть компьютер и корзину"
+    set "T_REVERT_DESC2=   - вернуть главную, сеть и галерею"
+    set "T_REVERT_DESC3=   - вернуть вид проводника"
+    set "T_REVERT_DESC4=   - сбросить цвета"
+    set "T_REVERT_DESC5=   - вернуть меню windows 11"
 ) else (
     set "T_MENU1=1  customization"
     set "T_MENU2=2  activate windows"
     set "T_MENU3=3  pc specs"
     set "T_MENU4=4  cleanup"
+    set "T_MENU5=5  apply / revert all"
     set "T_MENU0=0  exit"
+    set "T_APPLY_TITLE=apply / revert all"
     set "T_DESK=desktop"
     set "T_PC=computer"
     set "T_BIN=recycle bin"
@@ -412,7 +554,8 @@ if /i "%LANG%"=="ru" (
     set "T_EXP1=1  remove all (home, network, gallery)"
     set "T_EXP2=2  restore all"
     set "T_EXP3=3  make explorer compact"
-    set "T_EXP4=4  open this pc"
+    set "T_EXP4=4  restore explorer view"
+    set "T_EXP5=5  open this pc"
     set "T_CUST=customization"
     set "T_CUST1=1  desktop"
     set "T_CUST2=2  explorer"
@@ -429,5 +572,21 @@ if /i "%LANG%"=="ru" (
     set "T_CLN1=1  clear temp files"
     set "T_CLN_SIZE=freed:"
     set "T_CLN_PATH=folder:"
+    set "T_APPLYING=applying all settings..."
+    set "T_REVERTING=reverting all settings..."
+    set "T_APPLY1=1  apply all"
+    set "T_APPLY_DESC1=   - hide computer and recycle bin"
+    set "T_APPLY_DESC2=   - remove home, network and gallery"
+    set "T_APPLY_DESC3=   - enable compact explorer"
+    set "T_APPLY_DESC4=   - dark highlight color"
+    set "T_APPLY_DESC5=   - dark theme"
+    set "T_APPLY_DESC6=   - clean temp files"
+    set "T_APPLY_DESC7=   - enable classic context menu"
+    set "T_APPLY2=2  revert all"
+    set "T_REVERT_DESC1=   - restore computer and recycle bin"
+    set "T_REVERT_DESC2=   - restore home, network and gallery"
+    set "T_REVERT_DESC3=   - restore explorer view"
+    set "T_REVERT_DESC4=   - reset colors"
+    set "T_REVERT_DESC5=   - restore windows 11 context menu"
 )
 exit /b
