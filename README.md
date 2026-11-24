@@ -1,8 +1,8 @@
 # 👾 windows-tweaks by roksov69
 
 ![Windows 11](https://img.shields.io/badge/Windows-11-0078D6?style=for-the-badge&logo=windows11&logoColor=white)
-![Batch Script](https://img.shields.io/badge/Language-Batch-4D4D4D?style=for-the-badge&logo=windows-terminal&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Batch Script](https://img.shields.io/badge/Language-Batch-4D4D4D?style=for-the-badge&logo=windows-terminal&logoColor=white)
 
 **windows-tweaks** is a lightweight and minimalist set of utilities in a single `.bat` file that allows you to quickly configure Windows 11 without installing third-party software.
 
