@@ -33,6 +33,8 @@ echo   %T_MENU5%
 echo   %T_MENU0%
 echo.
 echo   -------------------------
+echo   %T_MENU6%
+echo   -------------------------
 if /i "%LANG%"=="ru" (
     echo   9  [ru]  en
 ) else (
@@ -48,8 +50,13 @@ if "%choice%"=="2" goto activate
 if "%choice%"=="3" goto specs
 if "%choice%"=="4" goto cleanup
 if "%choice%"=="5" goto apply_all_menu
+if "%choice%"=="8" goto website
 if "%choice%"=="9" set "RETURN=main" & goto switchlang
 if "%choice%"=="0" exit /b
+goto main
+
+:website
+start https://roksov69.netlify.app/
 goto main
 
 :apply_all_menu
@@ -500,6 +507,7 @@ if /i "%LANG%"=="ru" (
     set "T_MENU3=3  характеристики пк"
     set "T_MENU4=4  очистка"
     set "T_MENU5=5  применить / отменить все"
+    set "T_MENU6=8  сайт разработчика"
     set "T_MENU0=0  выход"
     set "T_APPLY_TITLE=применить / отменить все"
     set "T_DESK=рабочий стол"
@@ -561,6 +569,7 @@ if /i "%LANG%"=="ru" (
     set "T_MENU3=3  pc specs"
     set "T_MENU4=4  cleanup"
     set "T_MENU5=5  apply / revert all"
+    set "T_MENU6=8  developer website"
     set "T_MENU0=0  exit"
     set "T_APPLY_TITLE=apply / revert all"
     set "T_DESK=desktop"
