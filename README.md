@@ -47,9 +47,9 @@ All control is done through a convenient console menu. Here is what the script c
 ## 📸 Screenshot
 
 <div align="center">
-  <img width="320" alt="Menu Screenshot" src="https://github.com/user-attachments/assets/b039163b-4415-4f02-8968-bcf5990c8e10" />
+  <img width="320" alt="{C42F853D-1154-4445-9B4C-E5B6BB98D450}" src="https://github.com/user-attachments/assets/9b83e6cb-4a1e-46fe-88f2-df4054f06d76" />
   &nbsp;&nbsp;
-  <img width="320" alt="Explorer Screenshot" src="https://github.com/user-attachments/assets/c6c00c2d-1c12-4f97-a8f0-07e732901e96" />
+  <img width="320" alt="{FBC9A69F-0E91-4157-B2D5-BB1C8DB1C8C7}" src="https://github.com/user-attachments/assets/509ec1e8-963e-4937-bbcf-0594196b1dbc" />
 </div>
 
 ---
