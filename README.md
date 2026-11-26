@@ -53,8 +53,3 @@ All control is done through a convenient console menu. Here is what the script c
 ## ⚠️ Important Note
 
 Before running, make sure your antivirus is not blocking the `.bat` file. The script does not contain malicious code but uses the Registry and PowerShell to make changes. All actions are reversible.
-
-## 🔗 Links
-
-- **Developer Website**: [roksov69.netlify.app](https://roksov69.netlify.app/)
-- **GitHub Repository**: [github.com/roksov69/windows-tweaks](https://github.com/roksov69/windows-tweaks)
