@@ -1,4 +1,4 @@
-# 👾 windows-tweaks by roksov69
+# 👾 windows-tweaks
 
 ![Windows 11](https://img.shields.io/badge/Windows-11-0078D6?style=for-the-badge&logo=windows11&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
