@@ -56,7 +56,7 @@ if "%choice%"=="0" exit /b
 goto main
 
 :website
-start https://roksov69.netlify.app/
+start https://roksov69.github.io/
 goto main
 
 :apply_all_menu
